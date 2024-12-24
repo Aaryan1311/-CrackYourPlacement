@@ -1,22 +1,28 @@
 class Solution {
     public int[] maximumBeauty(int[][] items, int[] queries) {
-        TreeMap<Integer,Integer> map = new TreeMap<>();
-        for(int i = 0;i<items.length;i++){
-            if(!map.containsKey(items[i][0])) map.put(items[i][0],items[i][1]);
-            else  map.put(items[i][0],Math.max(items[i][1],map.get(items[i][0])));
-        }
+        Arrays.sort(items,(a,b) -> a[0] - b[0]);
         int max = 0;
-        TreeMap<Integer,Integer> finalmap = new TreeMap<>();
-        finalmap.put(0,0);
-        for(Map.Entry<Integer,Integer> e : map.entrySet()){
-            max = Math.max(e.getValue(),max);
-            finalmap.put(e.getKey(),max);
+        for(int i[] : items){
+            max = Math.max(i[1],max);
+            i[1] = max;
         }
-
-        int ans[] = new int[queries.length];
-        for(int i = 0;i<ans.length;i++){
-            ans[i] = finalmap.get(finalmap.floorKey(queries[i]) == null ? 0 : finalmap.floorKey(queries[i]));
+        int res[] = new int[queries.length];
+        for(int i = 0;i<queries.length;i++){
+            int l = 0;
+            int r = items.length-1;
+            int ans = 0;
+            while(l<=r){
+                int mid = l + (r-l)/2;
+                if(items[mid][0] <= queries[i]){
+                    ans = items[mid][1];
+                    l = mid+1;
+                }
+                else{
+                    r = mid-1;
+                }
+            }
+            res[i] = ans;
         }
-        return ans;
+        return res;
     }
 }
