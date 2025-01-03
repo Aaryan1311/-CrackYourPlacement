@@ -4,54 +4,41 @@ using namespace std;
 
 
 // } Driver Code Ends
-
-
 class Solution {
   public:
-    int helper(int idx, int act, vector<vector<int>>& arr, vector<vector<int>>& dp) {
-        // Base case: if we've considered all the rows
-        if (idx == arr.size()) return 0;
+    
+    int helper(int idx, int act, vector<vector<int>>& arr,  vector<vector<int>>& dp){
+        if(idx == arr.size()) return 0;
+        if(dp[idx][act] != -1) return dp[idx][act];
         
-        // If we've already computed the result for this state, return it
-        if (dp[idx][act] != -1) return dp[idx][act];
-        
-        int one = 0, two = 0, three = 0;
-        
-        // If act is -1, we can pick any action
-        if (act == 0) {
-            one = helper(idx + 1, 1, arr, dp) + arr[idx][0];
-            two = helper(idx + 1, 2, arr, dp) + arr[idx][1];
-            three = helper(idx + 1, 3, arr, dp) + arr[idx][2];
+        int one = 0;
+        int two = 0;
+        int three = 0;
+        if(act == 0){
+            one = helper(idx+1,1,arr,dp) + arr[idx][0];
+            two = helper(idx+1,2,arr,dp) + arr[idx][1];
+            three = helper(idx+1,3,arr,dp) +  arr[idx][2];
         }
-        // If the action was 1, we can't choose action 1 again
-        else if (act == 1) {
-            two = helper(idx + 1, 2, arr, dp) + arr[idx][1];
-            three = helper(idx + 1, 3, arr, dp) + arr[idx][2];
+        else if(act == 1){
+            two = helper(idx+1,2,arr,dp) + arr[idx][1];
+            three = helper(idx+1,3,arr,dp) +  arr[idx][2];
         }
-        // If the action was 2, we can't choose action 2 again
-        else if (act == 2) {
-            one = helper(idx + 1, 1, arr, dp) + arr[idx][0];
-            three = helper(idx + 1, 3, arr, dp) + arr[idx][2];
+        else if(act == 2){
+            one = helper(idx+1,1,arr,dp) + arr[idx][0];
+            three = helper(idx+1,3,arr,dp) +  arr[idx][2];
         }
-        // If the action was 3, we can't choose action 3 again
-        else {
-            one = helper(idx + 1, 1, arr, dp) + arr[idx][0];
-            two = helper(idx + 1, 2, arr, dp) + arr[idx][1];
+        else if(act == 3){
+            one = helper(idx+1,1,arr,dp) + arr[idx][0];
+            two = helper(idx+1,2,arr,dp) + arr[idx][1];
         }
-        
-        // Store the result in dp and return the maximum
-        return dp[idx][act] = max(one, max(two, three));
+        return dp[idx][act] = max(one,max(two,three));
     }
-
     int maximumPoints(vector<vector<int>>& arr, int n) {
-        // Create a dp table with -1 indicating uncomputed states
-        vector<vector<int>> dp(arr.size(), vector<int>(4, -1));
-        return helper(0, 0, arr, dp); // Start from index 0 with no previous action (-1)
+        // Code here
+        vector<vector<int>> dp(n+1,vector<int>(4,-1));
+        return helper(0,0,arr,dp);
     }
 };
-
-
-
 
 //{ Driver Code Starts.
 int main() {
