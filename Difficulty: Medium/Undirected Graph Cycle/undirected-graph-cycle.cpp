@@ -7,26 +7,31 @@ using namespace std;
 class Solution {
   public:
     // Function to detect cycle in an undirected graph.
-    bool dfs(int idx,vector<int>& vis, int par, vector<vector<int>>& adj){
-        vis[idx] = 1;
-        for(int i = 0;i<adj[idx].size();i++){
-            if(vis[adj[idx][i]] == 1 && adj[idx][i] != par) return true;
-            else if(adj[idx][i] != par){
-                bool b = dfs(adj[idx][i],vis,idx,adj);
-                if(b) return true;
-            }
-        }
-        return false;
-    }
     bool isCycle(vector<vector<int>>& adj) {
         // Code here
         vector<int> vis(adj.size(),-1);
         for(int i = 0;i<vis.size();i++){
             if(vis[i] == -1){
-                bool b = dfs(i,vis,-1,adj);
-                if(b) return true;
+            queue<pair<int,int>> q;
+            q.push({i,-1});
+            vis[i] = 1;
+            while(!q.empty()){
+            pair<int,int> p = q.front();
+            int idx = p.first;
+            int par = p.second;
+            for(int i = 0;i<adj[idx].size();i++){
+                if(vis[adj[idx][i]] == 1 && adj[idx][i] != par) return true;
+                if(adj[idx][i] != par){
+                    vis[adj[idx][i]] = 1;
+                    pair<int,int> p = {adj[idx][i],idx};
+                    q.push(p);
+                }
+            }
+            q.pop();
+        }
             }
         }
+       
         return false;
     }
 };
