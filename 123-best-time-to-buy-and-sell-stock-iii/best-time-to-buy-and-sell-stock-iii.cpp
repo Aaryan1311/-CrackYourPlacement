@@ -1,21 +1,26 @@
 class Solution {
 public:
-    int helper(int idx, int buy, int cnt, vector<int>& arr,vector<vector<vector<int>>>& dp){
+    int helper(int idx,int buy, int cnt, vector<int>& arr, vector<vector<vector<int>>>& dp){
         if(idx == arr.size()) return 0;
-        if(dp[idx][buy][cnt] != -1) return dp[idx][buy][cnt];
-        int choose = 0;
-        int notchoose = helper(idx+1,buy,cnt,arr,dp);
-        if(buy == 1 && cnt > 0){
-            choose = helper(idx+1,0,cnt-1,arr,dp) - arr[idx];
+        if(cnt == 2 && buy == 1){
+            return 0;
         }
-        else if(buy == 0){
+        if(dp[idx][cnt][buy] != -1) return dp[idx][cnt][buy];
+        int choose = 0;
+        int notchoose = 0;
+        if(buy){
+            choose = helper(idx+1,0,cnt+1,arr,dp) - arr[idx];
+            notchoose = helper(idx+1,buy,cnt,arr,dp);
+        }
+        else{
             choose = helper(idx+1,1,cnt,arr,dp) + arr[idx];
+            notchoose = helper(idx+1,0,cnt,arr,dp);
         }
 
-        return dp[idx][buy][cnt] = max(choose,notchoose);
+        return dp[idx][cnt][buy] = max(choose,notchoose);
     }
     int maxProfit(vector<int>& prices) {
-        vector<vector<vector<int>>> dp(prices.size(), vector<vector<int>> (3, vector<int> (3,-1)));
-        return helper(0,1,2,prices,dp);
+        vector<vector<vector<int>>> dp(prices.size(),vector<vector<int>> (3, vector<int> (2,-1)));
+        return helper(0,1,0,prices,dp);
     }
 };
