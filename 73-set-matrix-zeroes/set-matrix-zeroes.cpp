@@ -1,22 +1,42 @@
 class Solution {
 public:
-    void helper(int row, int col, vector<vector<int>>& arr){
-        for(int i = 0;i<arr[0].size();i++){
-            arr[row][i] = 0;
-        }
-        for(int j = 0;j<arr.size();j++){
-            arr[j][col] = 0;
-        }
-    }
     void setZeroes(vector<vector<int>>& matrix) {
-        vector<pair<int,int>> v;
+        int col0 = 1;
         for(int i = 0;i<matrix.size();i++){
             for(int j = 0;j<matrix[0].size();j++){
-               if(matrix[i][j] == 0) v.push_back({i,j});
+                if(matrix[i][j] == 0){
+                    matrix[i][0] = 0;
+                    if(j){
+                        matrix[0][j] = 0;
+                    }
+                    else col0 = 0;
+                }
             }
         }
-        for(int i = 0;i<v.size();i++){
-            helper(v[i].first,v[i].second,matrix);
+
+        for(int i = 1;i<matrix[0].size();i++){
+            if(matrix[0][i] == 0){
+                for(int j = 0;j<matrix.size();j++){
+                    matrix[j][i] = 0;
+                }
+            }
+        }
+
+
+
+
+        for(int i = 0;i<matrix.size();i++){
+            if(matrix[i][0] == 0){
+                for(int j = 0;j<matrix[0].size();j++){
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+
+        if(col0 == 0){
+            for(int j = 0;j<matrix.size();j++){
+                    matrix[j][0] = 0;
+                }
         }
         return;
     }
