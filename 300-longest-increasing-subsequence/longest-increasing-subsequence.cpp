@@ -1,15 +1,18 @@
 class Solution {
 public:
-int helper(int idx, int pre, vector<int>& nums, vector<vector<int>>& dp){
-    if(idx == nums.size()) return 0;
-    if(dp[idx][pre+1] != -1) return dp[idx][pre+1];
-    int choose = 0;
-    if(pre == -1 || nums[pre] < nums[idx]) choose = helper(idx+1,idx,nums,dp)+1;
-    int notchoose = helper(idx+1,pre,nums,dp);
-    return dp[idx][pre+1] = max(choose,notchoose);
-}
     int lengthOfLIS(vector<int>& nums) {
-        vector<vector<int>> dp(nums.size()+1, vector<int> (nums.size()+1,-1));
-        return helper(0,-1,nums,dp);
+        vector<int> dp(nums.size(), 1);
+        for(int i = 0;i<nums.size();i++){
+            for(int j = 0;j<i;j++){
+                if(nums[j] < nums[i]){
+                    dp[i] = max(dp[i],dp[j]+1);
+                }
+            }
+        }
+        int mx = 0;
+        for(int i = 0;i<dp.size();i++){
+            mx = max(dp[i],mx);
+        }
+        return mx;
     }
 };
