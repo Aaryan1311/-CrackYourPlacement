@@ -1,29 +1,21 @@
 class Solution {
 public:
-    int helper(vector<int>& nums){
+  int helper(vector<int>& nums){
         int mini = INT_MAX;
+        int val = -1;
         bool b = true;
         for(int i = 0;i<nums.size()-1;i++){
-            int val = nums[i];
+            val = nums[i];
             b = true;
            for(int j = i+1;j<nums.size() && b;j++){
+                cout << val << ' ' << nums[j] << endl;
                 val = gcd(val,nums[j]);
+                cout << val << endl;
                 if(val == 1){
+                    cout << i << ' ' << j << endl;
                     b = false;
                     mini = min(mini,j-i);
                 } 
-           }
-        }
-
-        for(int i = nums.size()-1;i>0;i--){
-            int val = nums[i];
-            b = true;
-           for(int j = i-1;j>=0 && b;j--){
-                val = gcd(val,nums[j]);
-                if(val == 1){
-                    b = false;
-                    mini = min(mini,abs(j-i));
-                }
            }
         }
         return mini == INT_MAX ? -1 : mini;
